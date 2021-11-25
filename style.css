@@ -1,0 +1,22 @@
+body {
+	background-image: url("images/BG/battleback6.png");
+	background-size:cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+#witch, img.witch{
+	position: fixed;
+	top:50%;
+	left:25%;
+	height:192px;
+	width:192px;
+}
+
+#templar, img.templar{
+	position: fixed;
+	top:50%;
+	right:25%;
+	height:172px;
+	width:172px;
+}
