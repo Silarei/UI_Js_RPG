@@ -4,15 +4,20 @@
 		<link rel="stylesheet" href="style.css" >
 		<title>UI Baptiste CARION</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="UI.js"></script> 
 	</head>
 	
 
 	<header>
+		<div id="combatLog">
+			Le combat a commencé !<br>
+			C'est au tour du templier bleu.
+		</div>
 
 	</header>
 	
-	<body onclick="Attack()">
+	<body onload="initialisation()">
 
 		<div class="monstres">			
 			<div>
@@ -22,11 +27,28 @@
 		
 		<div class="hero">			
 			<div>
-				<img src="images/hero/templar.png" id="templar"></img>
+				<img src="images/hero/templar.png" id="blueTemplar"></img>
+			</div>
+			<div>
+				<img src="images/hero/templar.png" id="redTemplar"></img>
+			</div>
+			<div>
+				<img src="images/hero/templar.png" id="greenTemplar"></img>
+			</div>
+			<div>
+				<img src="images/hero/templar.png" id="blackTemplar"></img>
 			</div>
 		</div>
 	
 	</body>
+
+	<footer>
+		<div>
+			<input type="button" onclick="attack()" value="ATTAQUE">
+		</div>
+
+
+	</footer>
 	
 	
 </html>
