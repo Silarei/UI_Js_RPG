@@ -21,30 +21,34 @@
 
 		<div class="monstres">			
 			<div>
-				<img src="images/monster/World01_006_Witch.png" id="witch"></img>
+				<img src="images/monster/World01_006_Witch.png" id="witch" onmouseover="afficherHP()"></img>
 			</div>
 		</div>
 		
 		<div class="hero">			
-			<div>
-				<img src="images/hero/templar.png" id="blueTemplar"></img>
+			<div id="blueTemplar">
+				<p id="blueTemplarHPA">PV : 50/50<br>PA : 10/10</p>
+				<img src="images/hero/templar.png" id="blueTemplarImg"></img>
 			</div>
-			<div>
-				<img src="images/hero/templar.png" id="redTemplar"></img>
+			<div id="redTemplar">
+				<p id="redTemplarHPA">PV : 40/40<br>PA : 20/20</p>
+				<img src="images/hero/templar.png" id="redTemplarImg"></img>
 			</div>
-			<div>
-				<img src="images/hero/templar.png" id="greenTemplar"></img>
+			<div id="greenTemplar">
+				<p id="greenTemplarHPA">PV : 30/30<br>PA : 30/30</p>
+				<img src="images/hero/templar.png" id="greenTemplarImg"></img>
 			</div>
-			<div>
-				<img src="images/hero/templar.png" id="blackTemplar"></img>
+			<div id="blackTemplar">
+				<p id="blackTemplarHPA">PV : 40/40<br>PA : 30/30</p>
+				<img src="images/hero/templar.png" id="blackTemplarImg"></img>
 			</div>
 		</div>
 	
 	</body>
 
 	<footer>
-		<div>
-			<input type="button" onclick="attack()" value="ATTAQUE">
+		<div id="debutround">
+			<input type="button" onclick="round()" value="Debut du nouveau round !">
 		</div>
 
 
