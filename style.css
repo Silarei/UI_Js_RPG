@@ -33,12 +33,6 @@ header {
 	width:192px;
 }
 
-#blueTemplar {
-	position: fixed;
-	top:50%;
-	right:30%;
-}
-
 #blueTemplarImg, img.templar, #redTemplarImg, img.templar, #greenTemplarImg, img.templar{
 	height:150px;
 	width:150px;
@@ -53,6 +47,12 @@ header {
 	border-radius:5px;
 	border-color:wheat;
 	text-align: center;
+}
+
+#blueTemplar {
+	position: fixed;
+	top:50%;
+	right:30%;
 }
 
 #redTemplar {
