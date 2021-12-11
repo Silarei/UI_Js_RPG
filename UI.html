@@ -12,7 +12,6 @@
 	<header>
 		<div id="combatLog">
 			Le combat a commencé !
-			
 		</div>
 
 	</header>
@@ -20,8 +19,17 @@
 	<body onload="initialisation()">
 
 		<div class="monstres">			
-			<div>
-				<img src="images/monster/World01_006_Witch.png" id="witch" onmouseover="afficherHP()"></img>
+			<div id="darkherald">
+				<p id="darkHeraldHP">PV : 140/140</p>
+				<img src="images/monster/darkHerald.png" id="darkheraldImg" onmouseover="afficherHP('darkHeraldHP')" onmouseout="cacherHP('darkHeraldHP')"></img>
+			</div>
+			<div id="abyssun">
+				<p id="abyssunHP">PV : 80/80</p>
+				<img src="images/monster/abyssalCrawler.png" id="abyssunImg" onmouseover="afficherHP('abyssunHP')" onmouseout="cacherHP('abyssunHP')"></img>
+			</div>
+			<div id="abyssdeux">
+				<p id="abyssdeuxHP">PV : 80/80</p>
+				<img src="images/monster/abyssalCrawler.png" id="abyssdeuxImg" onmouseover="afficherHP('abyssdeuxHP')" onmouseout="cacherHP('abyssdeuxHP')"></img>
 			</div>
 		</div>
 		
@@ -50,9 +58,10 @@
 		<div id="debutround">
 			<input type="button" onclick="round()" value="Debut du nouveau round !">
 		</div>
-
-
-	</footer>
-	
-	
+		<div id="targetselect">
+			<input type="button" id="darkHeraldButton" onclick="targetSelect(0)" value="Sombre Héraut">
+			<input type="button" id="abyssunButton" onclick="targetSelect(1)" value="Monstre abyssale (1)">
+			<input type="button" id="abyssdeuxButton" onclick="targetSelect(2)" value="Monstre abyssale (2)">
+		</div>
+	</footer>	
 </html>

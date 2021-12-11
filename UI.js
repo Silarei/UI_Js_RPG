@@ -12,8 +12,12 @@ var greenTemplarHP;
 var greenTemplarPA;
 var blackTemplarHP;
 var blackTemplarPA;
-var witchHP;
+var darkHeraldHP;
+var abyssunHP;
+var abyssdeuxHP;
 var compteurRound;
+var monstreCible
+var nomMonstreCible
 
 
 //Fonction d'initialisation des variables
@@ -38,9 +42,13 @@ function initialisation() {
     blackTemplarArmor = 10;
     blackTemplarAttack = 15;
     blackTemplarStunned = false;
-    witchHP = 80;
+    darkHeraldHP = 140;
+    abyssunHP = 80;
+    abyssdeuxHP = 80;
     nbTour = 1;
     compteurRound = 0;
+    monstreCible = 0;
+    nomMonstreCible = "Sombre Héraut"
 }
 
 function round() {
@@ -92,12 +100,7 @@ function round() {
 }
 
 function tourTemplier(templarName, templarAttack, templarPA) {
-    document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " se prépare à agir ! <br> <input type='button' onclick='templarAttackMonster(\""+templarName+"\","+templarAttack+")' value='Attaque'> <input type='button' onclick='templarDefend(\""+templarName+"\")' value='Defense'> <input type='button' onclick='templarSpecialAttack(\""+templarName+"\","+templarAttack+","+templarPA+")' value='Attaque Speciale'> ";
-}
-
-function templarAttackMonster(templarName, templarAttack) {
-    witchHP = witchHP - templarAttack;
-    document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " inflige " + templarAttack + "dégâts !<br> Il reste a la sorcière " + witchHP + " PV !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
+    document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " se prépare à agir ! <br> <input type='button' onclick='monstreBlessure(\""+templarName+"\","+templarAttack+")' value='Attaque'> <input type='button' onclick='templarDefend(\""+templarName+"\")' value='Defense'> <input type='button' onclick='templarSpecialAttack(\""+templarName+"\","+templarAttack+","+templarPA+")' value='Attaque Speciale'> ";
 }
 
 function templarDefend(templarName) {
@@ -162,8 +165,56 @@ function updateAllHPA() {
     document.getElementById("redTemplarHPA").innerHTML = "PV : " + redTemplarHP + "/40 <br>PA : " + redTemplarPA + "/20";
     document.getElementById("greenTemplarHPA").innerHTML = "PV : " + greenTemplarHP + "/30<br>PA : " + greenTemplarPA + "/30";
     document.getElementById("blackTemplarHPA").innerHTML = "PV : " + blackTemplarHP + "/40<br>PA : " + blackTemplarPA + "/30";
+    document.getElementById("darkHeraldHP").innerHTML = "PV : " + darkHeraldHP + "/140";
+    document.getElementById("abyssunHP").innerHTML = "PV : " + abyssunHP + "/80";
+    document.getElementById("abyssdeuxHP").innerHTML = "PV : " + abyssdeuxHP + "/80";
 }
 
-function afficherHP() {
+function afficherHP(id) {
+    document.getElementById(id).style.visibility='visible'
+}
 
+function cacherHP(id) {
+    document.getElementById(id).style.visibility='hidden'
+}
+
+function monstreBlessure(templarName, damage) {
+    if (monstreCible == 0) {
+        darkHeraldHP = darkHeraldHP - templarAttack;
+        updateAllHPA();
+        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " inflige " + damage + "dégâts !<br> Il reste au Sombre Héraut " + darkHeraldHP + " PV !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
+    }
+    else if (monstreCible == 1) {
+        abyssunHP = abyssunHP - damage;
+        updateAllHPA();
+        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " inflige " + damage + "dégâts !<br> Il reste au monstre abyssale (1) " + abyssunHP + " PV !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
+    }
+    else {
+        abyssdeuxHP = abyssdeuxHP - damage;
+        updateAllHPA();
+        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " inflige " + damage + "dégâts !<br> Il reste au monstre abyssale (2) " + abyssdeuxHP + " PV !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
+    }
+}
+
+function targetSelect(num) {
+    monstreCible = num;
+    if (num == 0) {
+        nomMonstreCible = "Sombre Héraut";
+        document.getElementById("darkHeraldButton").style.color='red';
+        document.getElementById("abyssunButton").style.color='black';
+        document.getElementById("abyssdeuxButton").style.color='black';
+        document.getElementById("abyssheraldImg").style.backgroundColor='red';
+    }
+    else if (num == 1) {
+        nomMonstreCible = "Monstre abyssale (1)";
+        document.getElementById("darkHeraldButton").style.color='black';
+        document.getElementById("abyssunButton").style.color='red';
+        document.getElementById("abyssdeuxButton").style.color='black';
+    }
+    else {
+        nomMonstreCible = "Monstre abyssale (2)";
+        document.getElementById("darkHeraldButton").style.color='black';
+        document.getElementById("abyssunButton").style.color='black';
+        document.getElementById("abyssdeuxButton").style.color='red';
+    }
 }
