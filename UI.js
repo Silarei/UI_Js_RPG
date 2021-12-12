@@ -226,8 +226,8 @@ function updateAllHPA() {
         document.getElementById('blackTemplar').style.visibility='hidden';
     }
     if (darkHeraldHP < 1) {
-        document.getElementById('darkHerald').style.visibility='hidden';
-        document.getElementById('darkheraldButton').style.visibility='hidden';
+        document.getElementById('darkherald').style.visibility='hidden';
+        document.getElementById('darkHeraldButton').style.visibility='hidden';
     }
     if (abyssunHP < 1) {
         document.getElementById('abyssun').style.visibility='hidden';
