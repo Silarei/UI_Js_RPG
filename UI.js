@@ -16,8 +16,11 @@ var darkHeraldHP;
 var abyssunHP;
 var abyssdeuxHP;
 var compteurRound;
-var monstreCible
-var nomMonstreCible
+var monstreCible;
+var nomMonstreCible;
+var compteurMonstre;
+var randomInt;
+var monsterTarget;
 
 
 //Fonction d'initialisation des variables
@@ -48,12 +51,15 @@ function initialisation() {
     nbTour = 1;
     compteurRound = 0;
     monstreCible = 0;
-    nomMonstreCible = "Sombre Héraut"
+    nomMonstreCible = "Sombre Héraut";
+    compteurMonstre = 0;
+    monsterTarget = 0;
 }
 
 function round() {
     if (compteurRound == 0) {
-
+        document.getElementById('blueTemplarHPA').style.color='black';
+        document.getElementById('blackTemplarHPA').style.color='white';
         if (!blueTemplarStunned && blueTemplarHP > 0) {
             tourTemplier("bleu", blueTemplarAttack, blueTemplarPA);    
         }
@@ -65,6 +71,8 @@ function round() {
         }
     }
     else if (compteurRound == 1) {
+        document.getElementById('redTemplarHPA').style.color='black';
+        document.getElementById('blueTemplarHPA').style.color='white';
         if (!redTemplarStunned && redTemplarHP > 0) {
             tourTemplier("rouge", redTemplarAttack, redTemplarPA);
         }
@@ -76,6 +84,8 @@ function round() {
         }
     }
     else if (compteurRound == 2) {
+        document.getElementById('greenTemplarHPA').style.color='black';
+        document.getElementById('redTemplarHPA').style.color='white';
         if (!greenTemplarStunned && greenTemplarHP > 0) {
             tourTemplier("vert", greenTemplarAttack, greenTemplarPA);
         }
@@ -87,6 +97,8 @@ function round() {
         }
     }
     else if (compteurRound == 3) {
+        document.getElementById('blackTemplarHPA').style.color='black';
+        document.getElementById('greenTemplarHPA').style.color='white';
         if (!blackTemplarStunned && blackTemplarHP > 0) {
             tourTemplier("noir", blackTemplarAttack, blackTemplarPA);
         }
@@ -96,6 +108,10 @@ function round() {
         else {
             document.getElementById("combatLog").innerHTML = "Le templier noir est incapable d'attaquer ce tour !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
         }
+    }
+    else if (compteurRound == 4) {
+        document.getElementById('blackTemplarHPA').style.color='white';
+        monsterStrikeBack();
     }
 }
 
@@ -121,22 +137,57 @@ function templarDefend(templarName) {
 
 function templarSpecialAttack(templarName, templarAttack, templarPA) {
     if (templarPA < 5) {
-        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " n'a pas suffisament de point d'action ! <br> <input type='button' onclick='templarAttackMonster(\""+templarName+"\","+templarAttack+")' value='Attaque'> <input type='button' onclick='templarDefend(\""+templarName+"\")' value='Defense'>";
+        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " n'a pas suffisament de point d'action ! <br> <input type='button' onclick='monstreBlessure(\""+templarName+"\","+templarAttack+")' value='Attaque'> <input type='button' onclick='templarDefend(\""+templarName+"\")' value='Defense'>";
     }
     else if (templarName == "bleu") {
         blueTemplarArmor = blueTemplarArmor * 3;
         redTemplarArmor = redTemplarArmor * 3;
         greenTemplarArmor = greenTemplarArmor * 3;
         blackTemplarArmor = blackTemplarArmor * 3;
+        blueTemplarPA = blueTemplarPA - 5;
+        updateAllHPA();
         document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " protège ses alliés !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
     }
     else if (templarName == "rouge") {
-        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " attaque aveuglément !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
+        redTemplarPA = redTemplarPA - 5;
+        updateAllHPA();
+        document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " attaque aveuglément !<br> <input type='button' onclick='monstreBlessure(\""+templarName+"\","+templarAttack*3+")' value='NEXT'>";
     }
     else if (templarName == "vert") {
+        if (blueTemplarHP < 50 && blueTemplarHP + 15 < 50) {
+            blueTemplarHP = blueTemplarHP + 15;
+        }
+        else if (blueTemplarHP < 50) {
+            blueTemplarHP = 50;
+        }
+        if (redTemplarHP < 40 && redTemplarHP + 15 < 40) {
+            redTemplarHP = redTemplarHP + 15;
+        }
+        else if (redTemplarHP < 40) {
+            redTemplarHP = 40;
+        }
+        if (greenTemplarHP < 30 && greenTemplarHP + 15 < 30) {
+            greenTemplarHP = greenTemplarHP + 15;
+        }
+        else if (greenTemplarHP < 30) {
+            greenTemplarHP = 30;
+        }
+        if (blackTemplarHP < 40 && blackTemplarHP + 15 < 40) {
+            blackTemplarHP = blackTemplarHP + 15;
+        }
+        else if (blackTemplarHP < 40) {
+            blackTemplarHP = 40;
+        }
+        greenTemplarPA = greenTemplarPA - 5;
+        updateAllHPA();
         document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " joint les mains en prière et soigne ses alliés !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
     }
     else {
+        blackTemplarPA = blackTemplarPA - 5;
+        abyssdeuxHP = abyssdeuxHP - blackTemplarAttack;
+        abyssunHP = abyssunHP - blackTemplarAttack;
+        darkHeraldHP = darkHeraldHP - blackTemplarAttack;
+        updateAllHPA();
         document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " exécute sa juste vengeance !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
     }
 }
@@ -146,16 +197,10 @@ function increaseCounter() {
     returnToStartingState()
 }
 
-function witchStrikeBack() {
-    blueTemplarHP = blueTemplarHP - 6;
-    document.getElementById("combatLog").innerHTML = "La sorcière inflige 6 dégâts !<br> Il reste au templier " + blueTemplarHP + "PV !<br> <input type='button' onclick='returnToStartingState()' value='NEXT'>";
-    updateAllHPA();
-}
-
 function returnToStartingState() {
-    if (compteurRound == 4) {
+    if (compteurRound == 5) {
         nbTour++;
-        compteurRound == 0;
+        compteurRound = 0;
     }
     document.getElementById("combatLog").innerHTML = "C'est le tour "+ nbTour + " !<br> <input type='button' onclick='round()' value='NEXT'>";
 }
@@ -168,6 +213,40 @@ function updateAllHPA() {
     document.getElementById("darkHeraldHP").innerHTML = "PV : " + darkHeraldHP + "/140";
     document.getElementById("abyssunHP").innerHTML = "PV : " + abyssunHP + "/80";
     document.getElementById("abyssdeuxHP").innerHTML = "PV : " + abyssdeuxHP + "/80";
+    if (blueTemplarHP < 1) {
+        document.getElementById('blueTemplar').style.visibility='hidden';
+    }
+    if (redTemplarHP < 1) {
+        document.getElementById('redTemplar').style.visibility='hidden';
+    }
+    if (greenTemplarHP < 1) {
+        document.getElementById('greenTemplar').style.visibility='hidden';
+    }
+    if (blackTemplarHP < 1) {
+        document.getElementById('blackTemplar').style.visibility='hidden';
+    }
+    if (darkHeraldHP < 1) {
+        document.getElementById('darkherald').style.visibility='hidden';
+        document.getElementById('darkheraldButton').style.visibility='hidden';
+    }
+    if (abyssunHP < 1) {
+        document.getElementById('abyssun').style.visibility='hidden';
+        document.getElementById('abyssunButton').style.visibility='hidden';
+    }
+    if (abyssdeuxHP < 1) {
+        document.getElementById('abyssdeux').style.visibility='hidden';
+        document.getElementById('abyssdeuxButton').style.visibility='hidden';
+    }
+    blueTemplarArmor = 10;
+    redTemplarArmor = 5;
+    greenTemplarArmor = 10;
+    blackTemplarArmor =  10;
+    if (blueTemplarHP > 0 || redTemplarHP > 0 || greenTemplarHP > 0 || blackTemplarHP > 0) {
+        document.getElementById("combatLog").innerHTML = "Les templiers sont tous morts";
+    }
+    if (darkHeraldHP > 0 || abyssunHP > 0 || abyssdeuxHP > 0) {
+        document.getElementById("combatLog").innerHTML = "Les monstres sont tous morts";
+    }
 }
 
 function afficherHP(id) {
@@ -180,7 +259,7 @@ function cacherHP(id) {
 
 function monstreBlessure(templarName, damage) {
     if (monstreCible == 0) {
-        darkHeraldHP = darkHeraldHP - templarAttack;
+        darkHeraldHP = darkHeraldHP - damage;
         updateAllHPA();
         document.getElementById("combatLog").innerHTML = "Le templier " + templarName + " inflige " + damage + "dégâts !<br> Il reste au Sombre Héraut " + darkHeraldHP + " PV !<br> <input type='button' onclick='increaseCounter()' value='NEXT'>";
     }
@@ -203,7 +282,6 @@ function targetSelect(num) {
         document.getElementById("darkHeraldButton").style.color='red';
         document.getElementById("abyssunButton").style.color='black';
         document.getElementById("abyssdeuxButton").style.color='black';
-        document.getElementById("abyssheraldImg").style.backgroundColor='red';
     }
     else if (num == 1) {
         nomMonstreCible = "Monstre abyssale (1)";
@@ -216,5 +294,88 @@ function targetSelect(num) {
         document.getElementById("darkHeraldButton").style.color='black';
         document.getElementById("abyssunButton").style.color='black';
         document.getElementById("abyssdeuxButton").style.color='red';
+    }
+}
+
+function monsterStrikeBack() {
+    if (blueTemplarHP > 0 || redTemplarHP > 0 || greenTemplarHP > 0 || blackTemplarHP > 0) {
+        selectionCible();
+        monsterName = "";
+        monsterAttack = 0;
+        if (darkHeraldHP > 0 && compteurMonstre == 0) {
+            compteurMonstre = compteurMonstre + 1;
+            monsterName = "Sombre Héraut";
+            monsterAttack = 30;
+            attackMonster(monsterAttack, monsterName)
+        }
+        else if (abyssunHP > 0 && compteurMonstre == 1) {
+            compteurMonstre = compteurMonstre + 1;
+            monsterName = "monstre abyssale (1)";
+            monsterAttack = 20;
+            attackMonster(monsterAttack, monsterName)
+        }
+        else if (abyssdeuxHP > 0 && compteurMonstre == 2) {
+            compteurMonstre = compteurMonstre + 1;
+            monsterName = "monstre abyssale (2)";
+            monsterAttack = 20;
+            attackMonster(monsterAttack, monsterName)
+        }
+        else if (compteurMonstre < 3) {
+            compteurMonstre = compteurMonstre + 1;
+        }
+        else {
+            compteurMonstre = 0;
+            increaseCounter();
+        }
+    }
+    else {
+        document.getElementById("combatLog").innerHTML = "Les templiers sont tous morts";
+    }
+}
+
+function attackMonster(monsterAttack, monsterName) {
+    if (monsterTarget == 0) {
+        if (blueTemplarHP - (monsterAttack - blueTemplarArmor) > 0) {
+            blueTemplarHP = blueTemplarHP - (monsterAttack - blueTemplarArmor);
+            updateAllHPA();
+        }
+        document.getElementById("combatLog").innerHTML = "Le " + monsterName + " inflige " + monsterAttack + "dégâts !<br> Il reste au templier bleu " + blueTemplarHP + " PV !<br> <input type='button' onclick='monsterStrikeBack()' value='NEXT'>";
+    }
+    else if (monsterTarget == 1) {
+        if (redTemplarHP - (monsterAttack - redTemplarArmor) > 0) {
+            redTemplarHP = redTemplarHP - (monsterAttack - redTemplarArmor);
+            updateAllHPA();
+        }
+        document.getElementById("combatLog").innerHTML = "Le " + monsterName + " inflige " + monsterAttack + "dégâts !<br> Il reste au templier rouge " + redTemplarHP + " PV !<br> <input type='button' onclick='monsterStrikeBack()' value='NEXT'>";
+    }
+    else if (monsterTarget == 2) {
+        if (greenTemplarHP - (monsterAttack - greenTemplarArmor) > 0) {
+            greenTemplarHP = greenTemplarHP - (monsterAttack - greenTemplarArmor);
+            updateAllHPA();
+        }
+        document.getElementById("combatLog").innerHTML = "Le " + monsterName + " inflige " + monsterAttack + "dégâts !<br> Il reste au templier vert " + greenTemplarHP + " PV !<br> <input type='button' onclick='monsterStrikeBack()' value='NEXT'>";
+    }
+    else {
+        if (blackTemplarHP - (monsterAttack - blackTemplarArmor) > 0) {
+            blackTemplarHP = blackTemplarHP - (monsterAttack - blackTemplarArmor);
+            updateAllHPA();
+        }
+        document.getElementById("combatLog").innerHTML = "Le " + monsterName + " inflige " + monsterAttack + "dégâts !<br> Il reste au templier rouge " + blackTemplarHP + " PV !<br> <input type='button' onclick='monsterStrikeBack()' value='NEXT'>";
+    }
+}
+
+function selectionCible() {
+    monsterTarget = Math.floor(Math.random() * 4);
+    if (monsterTarget == 0 && blueTemplarHP <= 0) {
+        selectionCible();
+    }
+    if (monsterTarget == 1 && redTemplarHP <= 0) {
+        selectionCible();
+    }
+    if (monsterTarget == 2 && greenTemplarHP <= 0) {
+        selectionCible();
+    }
+    if (monsterTarget == 3 && blackTemplarHP <= 0) {
+        selectionCible();
     }
 }
